@@ -69,6 +69,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 
+	UFUNCTION(BlueprintCallable)
+	void Pitch(float Value);
+
+	UFUNCTION(BlueprintCallable)
+	void Roll(float Value);
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawn")
 	TSubclassOf<AMyRocket> RocketClass;
 

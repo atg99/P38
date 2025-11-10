@@ -4,6 +4,7 @@
 #include "MyRocket.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyRocket::AMyRocket()
@@ -34,6 +35,8 @@ void AMyRocket::BeginPlay()
 
 	FTimerHandle DestroyTimer;
 	GetWorldTimerManager().SetTimer(DestroyTimer, FTimerDelegate::CreateLambda([this]() { Destroy(); }), 3, false);
+
+	Rocket->OnComponentBeginOverlap.AddDynamic(this, &AMyRocket::OnRocketBeginOverlap);
 	
 }
 
@@ -42,5 +45,16 @@ void AMyRocket::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AMyRocket::OnRocketBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor->ActorHasTag("Target"))
+	{	
+		TSubclassOf<UDamageType> DamageType;
+		
+		UGameplayStatics::ApplyDamage(OtherActor, 10, Cast<APawn>(GetOwner())->GetController(), this, DamageType);
+		//OtherActor->TakeDamage();
+	}
 }
 

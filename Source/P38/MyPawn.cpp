@@ -13,6 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 
 #include "MyRocket.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AMyPawn::AMyPawn()
@@ -76,6 +77,7 @@ void AMyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	FloatingPawnMovement->AddInputVector(GetActorForwardVector()*100*DeltaTime);
+	//AddMovementInput();
 
 	Left->AddLocalRotation(FRotator(0,0,1000.f*DeltaTime));
 	Right->AddLocalRotation(FRotator(0, 0, 1000.f * DeltaTime));
@@ -95,7 +97,20 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AMyPawn::Fire()
 {
 	FActorSpawnParameters SpawnParam;
-	
+	SpawnParam.Owner = this;
+	ArrowCompoent->K2_GetComponentToWorld();
 	GetWorld()->SpawnActor<AMyRocket>(RocketClass, FTransform(GetActorRotation() + FRotator(-90.f, 0, 0), GetActorLocation(), FVector(1.f)), SpawnParam);
 }
+
+void AMyPawn::Pitch(float Value)
+{
+	AddActorLocalRotation(FRotator(Value * 60 * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()), 0, 0));
+}
+
+void AMyPawn::Roll(float Value)
+{
+	AddActorLocalRotation(FRotator(0, 0, Value * 60 * UGameplayStatics::GetWorldDeltaSeconds(GetWorld())));
+}
+
+
 
