@@ -9,9 +9,20 @@
 /**
  * 
  */
+
+class UInputMappingContext;
+
 UCLASS()
 class P38_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
+
+protected:
+
+	virtual void SetupInputComponent() override;
+
+	/** Input Mapping Contexts */
+	UPROPERTY(EditAnywhere, Category = "Input|Input Mappings")
+	UInputMappingContext* DefaultMappingContext;
 };

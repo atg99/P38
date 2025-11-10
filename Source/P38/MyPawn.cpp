@@ -9,6 +9,11 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "Components/ArrowComponent.h"
 
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+
+#include "MyRocket.h"
+
 // Sets default values
 AMyPawn::AMyPawn()
 {
@@ -81,5 +86,16 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) 
+	{
+		EnhancedInputComponent->BindAction(FAction, ETriggerEvent::Started, this, &AMyPawn::Fire);
+	}
+}
+
+void AMyPawn::Fire()
+{
+	FActorSpawnParameters SpawnParam;
+	
+	GetWorld()->SpawnActor<AMyRocket>(RocketClass, FTransform(GetActorRotation() + FRotator(-90.f, 0, 0), GetActorLocation(), FVector(1.f)), SpawnParam);
 }
 

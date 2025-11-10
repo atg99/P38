@@ -14,6 +14,9 @@ class UFloatingPawnMovement;
 class USpringArmComponent;
 class UArrowComponent;
 
+class UInputAction;
+class AMyRocket;
+
 UCLASS()
 class P38_API AMyPawn : public APawn
 {
@@ -59,5 +62,14 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* Right;
 
+
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* FAction;
+
+	UFUNCTION(BlueprintCallable)
+	void Fire();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawn")
+	TSubclassOf<AMyRocket> RocketClass;
 
 };
